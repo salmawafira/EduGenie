@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>EduGenie - Learning Assistant</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 700px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        textarea, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            box-sizing: border-box;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>EduGenie - Learning Assistant</h1>
+
+    <label>Select Task:</label>
+    <select id="task">
+        <option value="Explain">Explain</option>
+        <option value="Q&A">Q&A</option>
+        <option value="Quiz">Quiz</option>
+        <option value="Summary">Summary</option>
+        <option value="Recommend Path">Recommend Path</option>
+    </select>
+
+    <textarea id="question" rows="6"
+        placeholder="Enter your question..."></textarea>
+
+    <button onclick="askQuestion()">Submit</button>
+
+    <h3>Result:</h3>
+    <div id="result">Your answer will appear here.</div>
+
+    <script>
+        async function askQuestion() {
+            const task = document.getElementById("task").value;
+            const question = document.getElementById("question").value;
+
+            const response = await fetch("/ask", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    task: task,
+                    question: question
+                })
+            });
+
+            const data = await response.json();
+
+            document.getElementById("result").innerText = data.answer;
+        }
+    </script>
+
+</body>
+</html>
